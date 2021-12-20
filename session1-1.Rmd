@@ -305,7 +305,7 @@ writers were.
 ```{python, echo = TRUE}
 office = pd.read_csv("https://uwmadison.box.com/shared/static/ab0opn7t8cagr1gj87ty94nomu5s347o.csv")
 office.head()
-X, y = office.iloc[:, 2:], office["imdb_rating"]
+X, y = office.iloc[:, 2:-1], office["imdb_rating"]
 y = (y - y.mean()) / y.std() # standardize
 ```
 The block below fits the Elastic Net model and saves the coefficients $\hat{b}$.
@@ -321,8 +321,8 @@ beta_hat = model.coef_ # notice the sparsity
 beta_hat
 ```
 
-We can confirm that the training error is quite good, though we will discuss
-later how to guard against potential overfitting.
+We can confirm that the predictions are correlated relatively well with the
+truth.
 
 ```{r, echo = TRUE}
 office <- data.frame(py$X, y = py$y, y_hat = py$y_hat)

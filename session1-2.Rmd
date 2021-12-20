@@ -13,24 +13,35 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
+library(ggplot2)
+library(reticulate)
+theme424 <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(theme424)
 opts_chunk$set(echo = FALSE, fig.align = "center", out.width = 500)
 ```
 
-1. A few simple improvements to the quality of a dataset can make a much bigger
+1. A few simple improvements to the quality of a dataset can make a bigger
 impact in downstream modeling performance than even the most extensive search
 across the fanciest models. For this reason, in real-world modeling (not to
-mention competitions), significant time is dedicated to data exploration and
+mention machine learning competitions), significant time is dedicated to data exploration and
 preprocessing^[This is related to what Andrej Karpathy calls [step
 1](http://karpathy.github.io/2019/04/25/recipe/).] In these notes, we'll review
-some of the most common changes we can make to a dataset before we feed it into
-a model.
+some of the most common dataset transformations we should consider before simply
+throwing it into a model.
 
 2. First, a caveat: Never overwrite the raw data! Instead, write a workflow that
-transforms the raw data into preprocessed data. This makes it possible to try a
-few different transformations and see how the resulting performances compare.
+transforms the raw data into a preprocessed form. This makes it possible to try
+a few different transformations and see how the resulting performances compare.
 Also, we want to have some confidence that the overall analysis is reproducible,
-and if we make irreversible changes to the raw data, then we lose all chance at
-that.
+and if we make irreversible changes to the raw data, then that becomes impossible.
 
 ### Preprocessing
 
@@ -116,8 +127,6 @@ in, the raw data. For example, linear regression would struggle with either of
 the cases below,
 
 ```{r}
-library(ggplot2)
-theme_set(theme_bw())
 x <- data.frame(x = seq(-1, 1, .1))
 x$x2 <- x$x^2
 x$indic <- x$x > 0

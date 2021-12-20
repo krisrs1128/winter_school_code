@@ -17,6 +17,17 @@ library(knitr)
 library(reshape2)
 library(ggplot2)
 library(readr)
+library(reticulate)
+theme424 <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(theme424)
 opts_chunk$set(echo = FALSE, fig.align = "center", out.width = 500)
 ```
 
@@ -130,11 +141,16 @@ paribus and partial dependence profiles.
 9. We will write $x^{d \vert = z}$ to denote the observation $x$ with the
 $d^{th}$ coordinate set to $z$. How should we describe the effect of changing
 the $d^{th}$ input on predictions made by complex models $f\left(x\right)$? As a
-thought experiment, consider the example below. The surface is the fitted
-function $f(x)$, mapping a two dimensional input $x$ to a continuous response.
-How would you summarize the relationship between $x_1$ and $y$? The main problem
-is that the shape of the relationship depends on which value of $x_2$ we start
-at.
+thought experiment, consider the example below. 
+
+```{r}
+include_graphics("figures/interaction-effects.png")
+```
+
+The surface is the fitted function $f(x)$, mapping a two dimensional input $x$
+to a continuous response. How would you summarize the relationship between $x_1$
+and $y$? The main problem is that the shape of the relationship depends on which
+value of $x_2$ we start at.
 
 10. One idea is to consider the values of $x_2$ that were observed in our
 dataset. Then, we can evaluate our model over a range of values $x_1$ after
@@ -191,7 +207,7 @@ much higher -- the top left has much more light green.
 
 I've hidden the code used to
 visualize them, because it is a bit more involved than everything else covered
-so far. That said, you can read the original source on the github page.
+so far. That said, you can read the original source on the [github page](https://github.com/krisrs1128/winter_school_2021/blob/main/_posts/2021-12-15-session1-4/session1-4.Rmd).
 
 ```{r}
 cp_data <- py$pd_data[["individual"]] %>%
