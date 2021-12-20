@@ -1,1 +1,2 @@
 Rscript -e "reticulate::install_miniconda()"
+Rscript -e "reticulate::conda_install(c('pandas', 'numpy', 'matplotlib', 'scikit-learn'))"
