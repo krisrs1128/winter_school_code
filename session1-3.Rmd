@@ -39,7 +39,7 @@ this complicated curve to a training dataset,
 include_graphics("figures/overfit-1.png")
 ```
 
-It would get seem to have perfect performance on the training data. Now imagine
+It would have perfect performance on the training data. Now imagine
 that we collected a few more samples, all from the same population,
 
 ```{r}
@@ -70,7 +70,7 @@ is perfect on the training dataset. But it will likely perform worse than the
 simpler boundary here,
 
 ```{r}
-include_graphics("figures/class-overfit-1.png")
+include_graphics("figures/class-overfit-2.png")
 ```
 
 3. This phenomenon is called _overfitting_. Complex models might appear to do
@@ -80,15 +80,15 @@ choosing models that are complex enough to fit the essential structure in a
 dataset, but not so complex that they overfit to patterns that will not appear
 again in future samples.
 
-```{r}
-include_graphics("figures/validation-set-1.png")
-```
-
 4. The simplest way to choose a model with the right level of complexity is to
 use data splitting. Randomly split the data that are available into a train and
 a test sets. Fit a collection of models, all of different complexities, on the
 training set. Look at the performances of those models on the test set. Choose
 the model with the best performance on the test set.
+
+```{r, out.width = 650}
+include_graphics("figures/validation-set-1.png")
+```
 
 5. A more sophisticated approach is to use cross-validation. Instead of using
 only a single train / test split, we can group the data into $K$-different
@@ -96,7 +96,7 @@ only a single train / test split, we can group the data into $K$-different
 out one of the folds. Performance of these models on the hold-out folds is used
 for estimating the appropriate complexity level.
 
-```{r}
+```{r, out.width = 700}
 include_graphics("figures/cv-full.png")
 ```
 
@@ -190,21 +190,21 @@ scores
 9. Related to overfitting, there is an important phenomenon called the
 bias-variance tradeoff. To understand this trade-off, imagine being able to
 sample hundreds of datasets similar to the one that is available. On each of
-these imaginary datasets, we can imagine training a new model (at a given
+these datasets, we can train a new model (at a given
 complexity level). Then, we can define,
-    * Bias: Average predictions from models trained across each of the imaginary
+    * Bias: Average the predictions from models trained across each of the imaginary
     datasets. How far off are they from the truth, on average?
-    * Variance: How similar are predictions from across the different models?
+    * Variance: How similar are predictions from across the different runs?
   
-```{r}
+```{r, out.width = 650}
 include_graphics("figures/bias-variance-1.png")
 ```
 
 Ideally, we would have low values for both bias and variance, since they both
 contribute to performance on the test set. In practice, though, there is a
-trade-off. Often, the models that tend to be closest to the truth on average
-might be far off on any individual run. Conversely, models that are very stable
-from run to run might be consistently incorrect in certain regions.
+trade-off. Often, the high-powered models that tend to be closest to the truth on average
+might be far off on any individual run (high variance). Conversely, overly simple models that are very stable
+from run to run might be consistently incorrect in certain regions (bias).
 
 Models with high variance but low bias tend to be overfit, and models with low
 variance but high bias tend to be underfit. Models that have good test or

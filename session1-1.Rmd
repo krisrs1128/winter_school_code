@@ -119,10 +119,8 @@ include_graphics("figures/class-2d.png")
 problem, especially when the number of potentially informative features $D$ is
 large. It helps to have predefined types of curves (and boundaries) that we can
 refer to and use to partially automate the process of supervised learning. We'll
-call an example of these predefined curve types a "model class." In later notes,
-we'll discuss how exactly to choose one member of each model class that fits a
-dataset well. For now, let's just build some intuition about what each model
-class looks like and how we might be able to fit it with data.
+call an example of these predefined curve types a "model class." Let's just build some intuition about what each model class looks
+like and how we might be able to fit it with data.
 
 #### Linear Models
 
@@ -165,9 +163,9 @@ include_graphics("figures/logistic-2d.png")
 To describe this, we need to define a direction $b$ perpendicular to the
 boundary. We will say that whenever
 \begin{align*}
-f_{b}\left(x\right) = \frac{1}{1 + \text{exp}\left(x^{T}b\right)}
+f_{b}\left(x\right) = \frac{1}{1 + \text{exp}\left(b^T x\right)}
 \end{align*}
-is larger than 0.5, we're in the orange region, and whenever it's smaller than
+is larger than 0.5, we're in the red region, and whenever it's smaller than
 0.5, we're in the purple region. This kind of model is called a _logistic regression model_.
 
 ```{r}
@@ -177,7 +175,7 @@ include_graphics("figures/logistic-2d-arrow.png")
 9. We need a loss function for logistic regression too. In theory, we could
 continue to use squared error loss, but we can do better by considering the fact
 that the true response is only one of two values. To make things concrete, say
-that $y_i = 1$ whenever it is an orange point, otherwise $y_i = 0$. We can use
+that $y_i = 1$ whenever it is an red point, otherwise $y_i = 0$. We can use
 binary cross-entropy loss,
 
 \begin{align*}
@@ -192,12 +190,13 @@ include_graphics("figures/logx.png")
 ```
 
 If 1 is predicted with probability 1, then there is no loss (and conversely for
-0). The loss increases the further we are from the truth.
+0). The loss increases the further the predicted probability is from the true
+class.
 
 9. Let's fit a linear regression in code. Below, I'm loading a dataset about
 diabetes disease progression. The response $y$ is disease severity one year
 after diagnosis, it ranges from 25 (low severity) to 246 (high severity). There
-are $D = 10$ numeric predictors; below I print 4 samples corresponding to the first 5.
+are $D = 10$ numeric predictors; below I print 4 samples corresponding to the first 5 features.
 
 ```{python, echo = TRUE}
 import numpy as np
@@ -210,10 +209,11 @@ X[:4, :5] # first five predictors
 y[:4] # example response
 ```
 
-Let's now fit a linear model from $X$ to $y$. The first line tells python that
-we are using a Linear Regression model class. The second searches over
-coefficients $b$ to minimize the squared-error loss between $x^T b$ and $y$. The
-third line prints out the fitted coefficient $\hat{b}$.
+Let's now fit a linear model from $\mathbf{x}_1, \dots, \mathbf{x}_{N}$ to $y$.
+The first line tells python that we are using a `LinearRegression` model class.
+The second searches over coefficients $b$ to minimize the squared-error loss
+between the $b^T x_i$ and $y_i$. The third line prints out the fitted coefficient
+$\hat{b}$.
 
 ```{python, echo = TRUE}
 model = linear_model.LinearRegression()
@@ -277,7 +277,7 @@ predictors.
 
 12. In many cases, we will have recorded many types of features -- coordinates
 of $x_{i}$ -- that are not actually related to the response. A model that knows
-to ignore certain of the features will do better than a model that tries to use
+to ignore irrelevant features will do better than a model that tries to use
 all of them. This is the main idea behind using sparsity in linear regression.
 We again fit the model
 \begin{align*}
@@ -300,9 +300,9 @@ include_graphics("figures/logistic-2d-sparse.png")
 ```
 
 14. To implement sparse linear regression using `sklearn`, we can use the
-`ElasticNet` class. We'll work with the Office dataset. The task is to predict
-the IMDB ratings for each episode based on which actors are in it and who the
-writers were.
+`ElasticNet` class. We'll work with The Office dataset (as in, the TV series,
+The Office). The task is to predict the IMDB ratings for each episode based on
+how often certain actors / writers appeared in it and also who the episode writers were.
 
 ```{python, echo = TRUE}
 office = pd.read_csv("https://uwmadison.box.com/shared/static/ab0opn7t8cagr1gj87ty94nomu5s347o.csv")
@@ -345,10 +345,10 @@ include_graphics("figures/decision-tree-traffic.png")
 
 Notice that we can use the same logic to do either regression or classification.
 For regression, we associate each "leaf" at the bottom of the tree with a
-continuous prediction. For classification, we associate it with the probability
-for different classes. It turns out that we can train these models using squared
-error and cross-entropy losses as before, though the details are beyond the
-scope of these notes.
+continuous prediction. For classification, we associate leaves with
+probabilities for different classes. It turns out that we can train these models
+using squared error and cross-entropy losses as before, though the details are
+beyond the scope of these notes.
 
 16. It's not immediately obvious, but these rules are equivalent to drawing
 curves that are piecewise constant over subsets of the input space. Let's
@@ -415,19 +415,19 @@ strengths and weaknesses.
 
 |  | Strengths | Weaknesses |
 |---|---|---|
-| Linear / Logistic Regression | * Often to easy interpret<br>* No tuning parameters<br>* Very fast to train | * Unstable when many features to pick from<br>* Can only fit linear curves / boundaries (though, see featurization notes) |
+| Linear / Logistic Regression | * Often easy to interpret<br>* No tuning parameters<br>* Very fast to train | * Unstable when many features to pick from<br>* Can only fit linear curves / boundaries (though, see featurization notes) |
 | Sparse Linear / Logistic Regression | * Often easy to interpret<br>* Stable even when many features to pick from<br>* Very fast to train | * Can only fit linear curves / boundaries |
 | Tree-based Classification / Regression | * Can fit nonlinear functions of inputs | * Can be slow to train<br>* Somewhat harder to interpret |
 
 21. Try matching models to responses in the examples below,
 
-  * Q1: We want to predict whether a patient has a disease given just the genetic
+  * Q1: We want to predict whether a patient has a disease given just their genetic
   profile. There are 1000 genes that can serve as predictors. There are only two
   possible responses.
   * Q2: A user on a site has been watching (too many...) episodes of Doctor
   Who. How many more minutes will they remain on the site today? As predictors,
-  you have their features of their current and past viewing behavior (e.g.,
-  current time of day, number of hours per week for each of the last 4 weeks,
+  you have features of their current and past viewing behavior (e.g.,
+  current time of day, number of hours on the site per week for each of the last 4 weeks,
   etc.). We suspect that there are important nonlinear relationships between
   these predictors and the response.
   * Q3: We are trying to predict the next hour's total energy production in a wind

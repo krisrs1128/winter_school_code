@@ -68,14 +68,14 @@ statistic. The importance of a variable measures the deterioration in a model
 when that variable is removed. If the model deteriorates substantially, then
 that variable is said to be important.
 
-```{r}
+```{r, out.width = 650}
 include_graphics("figures/variable-importance.png")
 ```
 
 4. Let's see how we extract coefficients and variable importance measures in
 `sklearn.` First, we'll revisit the Office prediction task. Earlier, we found
 that the cast and writers were predictive of user ratings, but we never
-discussed which of the features were actually relevant. The block below refits the code we had from before.
+discussed which of the features were actually relevant. The block below reruns the code we had from before.
 
 ```{python, echo = TRUE}
 import pandas as pd
@@ -181,7 +181,7 @@ dataset. This is called a partial dependence (PD) profile.  It is a more concise
 alternative to CP profiles, showing one curve per features, rather than one
 curve per sample.
 
-12. We can visualize the CP profiles using the `plot_partial_dependence`
+12. We can visualize the CP profiles using the `partial_dependence`
 function in `sklearn`. Let's apply it to the gradient boosting classifier we
 used for the penguins dataset. The block below refits the gradient boosting
 model.
@@ -197,10 +197,9 @@ X, y = penguins[["bill_length_mm", "bill_depth_mm"]], penguins["species"]
 model.fit(X, y)
 ```
 
-We use the `partial_dependence` function from the `sklearn.inspection` module to
-compute partial dependence scores for one of the features, `bill_length_mm`.
-This will give us a sense of how the three class probabilities change as we vary
-the bill length, all else held equal.
+We now compute partial dependence scores for one of the features,
+`bill_length_mm`. This will give us a sense of how the three class probabilities
+change as we vary the bill length, all else held equal.
 
 
 ```{python, echo = TRUE}
