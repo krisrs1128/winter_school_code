@@ -8,6 +8,8 @@ author:
 date: 12-15-2021
 output:
   distill::distill_article:
+    highlight: pygments
+    highlight_downlit: false
     self_contained: false
 ---
 
@@ -126,7 +128,7 @@ squared error or cross-entropy losses on test samples. Take samples in the far
 right tail -- these are those with very large loss. What characteristics do they
 tend to share?
 
-```{r}
+```{r, out.width = 650}
 include_graphics("figures/error-analysis.png")
 ```
 

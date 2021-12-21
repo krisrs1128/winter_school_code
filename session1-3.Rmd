@@ -8,6 +8,8 @@ author:
 date: 12-15-2021
 output:
   distill::distill_article:
+    highlight: pygments
+    highlight_downlit: false
     self_contained: false
 ---
 
@@ -100,23 +102,22 @@ include_graphics("figures/cv-full.png")
 
 6. There are a few subtleties related to train / test splits and
 cross-validation that are worth knowing,
-
-  * We want the held-out data to be as representative of new, real-world data as
-  possible. Sometimes, randomly split data will not be representative. For
-  example, maybe the data are collected over time. A more "honest" split would
-  split data into past vs. future samples starting at a few different
-  timepoints, training on past and evaluating on future. The sample issue occurs
-  if we plan on applying a model to a new geographic context or market segment,
-  for example.
-  * Cross-validation can be impractical on larger datasets. For this reason, we
-  often see only a single train / test split for evaluation of algorithms in
-  large data settings.
-  * We incur a bias when splitting the data. The fact that we split the data
-  means that we aren't using all the available data, which leads to slightly
-  lower performance. If it hurts more complex models more than simpler ones,
-  than it can even lead to slightly incorrect selection. After having chosen a
-  given model complexity, it's worth retraining that model on the full available
-  dataset.
+    * We want the held-out data to be as representative of new, real-world data as
+    possible. Sometimes, randomly split data will not be representative. For
+    example, maybe the data are collected over time. A more "honest" split would
+    split data into past vs. future samples starting at a few different
+    timepoints, training on past and evaluating on future. The sample issue occurs
+    if we plan on applying a model to a new geographic context or market segment,
+    for example.
+    * Cross-validation can be impractical on larger datasets. For this reason, we
+    often see only a single train / test split for evaluation of algorithms in
+    large data settings.
+    * We incur a bias when splitting the data. The fact that we split the data
+    means that we aren't using all the available data, which leads to slightly
+    lower performance. If it hurts more complex models more than simpler ones,
+    than it can even lead to slightly incorrect selection. After having chosen a
+    given model complexity, it's worth retraining that model on the full available
+    dataset.
 
 7. Let's implement both simple train / test and cross-validation using
 `sklearn`. First, let's just use a train / test split, without cross-validating.
@@ -191,11 +192,10 @@ bias-variance tradeoff. To understand this trade-off, imagine being able to
 sample hundreds of datasets similar to the one that is available. On each of
 these imaginary datasets, we can imagine training a new model (at a given
 complexity level). Then, we can define,
-
-  * Bias: Average predictions from models trained across each of the imaginary
-  datasets. How far off are they from the truth, on average?
-  * Variance: How similar are predictions from across the different models?
-
+    * Bias: Average predictions from models trained across each of the imaginary
+    datasets. How far off are they from the truth, on average?
+    * Variance: How similar are predictions from across the different models?
+  
 ```{r}
 include_graphics("figures/bias-variance-1.png")
 ```

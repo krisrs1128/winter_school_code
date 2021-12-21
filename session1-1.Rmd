@@ -8,6 +8,8 @@ author:
     affiliation_url: https://stat.wisc.edu
 output:
   distill::distill_article:
+    highlight: pygments
+    highlight_downlit: false
     self_contained: false
 ---
 
@@ -83,7 +85,7 @@ curve from data.
 include_graphics("figures/curve-1d.png")
 ```
 
-  In higher-dimensions, this becomes a surface.
+   In higher-dimensions, this becomes a surface.
 
 ```{r}
 include_graphics("figures/curve-2d.png")
@@ -152,7 +154,7 @@ good choice is squared error loss,
 L\left(b\right) = \sum_{i = 1}^{N} \left(y_i - b^{T}x_{i}\right)^2.
 \end{align*}
 
-7. For classification, we can imagine drawing a linear boundary. For simplicity,
+8. For classification, we can imagine drawing a linear boundary. For simplicity,
 we'll assume we have only two classes, though a similar partition of the space
 can be made for arbitrary numbers of classes.
 
@@ -172,7 +174,7 @@ is larger than 0.5, we're in the orange region, and whenever it's smaller than
 include_graphics("figures/logistic-2d-arrow.png")
 ```
 
-8. We need a loss function for logistic regression too. In theory, we could
+9. We need a loss function for logistic regression too. In theory, we could
 continue to use squared error loss, but we can do better by considering the fact
 that the true response is only one of two values. To make things concrete, say
 that $y_i = 1$ whenever it is an orange point, otherwise $y_i = 0$. We can use
@@ -192,7 +194,7 @@ include_graphics("figures/logx.png")
 If 1 is predicted with probability 1, then there is no loss (and conversely for
 0). The loss increases the further we are from the truth.
 
-8. Let's fit a linear regression in code. Below, I'm loading a dataset about
+9. Let's fit a linear regression in code. Below, I'm loading a dataset about
 diabetes disease progression. The response $y$ is disease severity one year
 after diagnosis, it ranges from 25 (low severity) to 246 (high severity). There
 are $D = 10$ numeric predictors; below I print 4 samples corresponding to the first 5.
@@ -219,7 +221,7 @@ model.fit(X, y)
 model.coef_ # fitted b coefficients
 ```
 
-9. Let's do the same thing for a logistic regression. This time, we'll use the
+10. Let's do the same thing for a logistic regression. This time, we'll use the
 Palmer's Penguins dataset, which tries to classify penguins into one of three
 types based on their appearance. For example, two of the features are bill
 height and bill depth (figure from Allison Horst's `palmerspenguins`
@@ -247,7 +249,7 @@ ggplot(py$penguins) +
   labs(x = "Bill Length", y = "Bill Depth")
 ```
 
-10. It seems like we should be able to draw nice boundaries between these
+11. It seems like we should be able to draw nice boundaries between these
 classes. Let's fit the model.
 
 ```{python, echo = TRUE}
@@ -273,7 +275,7 @@ predictors.
 
 #### Sparse Linear Models
 
-10. In many cases, we will have recorded many types of features -- coordinates
+12. In many cases, we will have recorded many types of features -- coordinates
 of $x_{i}$ -- that are not actually related to the response. A model that knows
 to ignore certain of the features will do better than a model that tries to use
 all of them. This is the main idea behind using sparsity in linear regression.
@@ -289,7 +291,7 @@ inputs, all else held equal.
 include_graphics("figures/linear-1d-sparse.png")
 ```
 
-11. The same idea can be applied to logistic regression. In this case, having a
+13. The same idea can be applied to logistic regression. In this case, having a
 coefficient $b_d = 0$  means that the probabilities for different class labels
 do not change at all as features $x_d$ is changed.
 
@@ -297,7 +299,7 @@ do not change at all as features $x_d$ is changed.
 include_graphics("figures/logistic-2d-sparse.png")
 ```
 
-12. To implement sparse linear regression using `sklearn`, we can use the
+14. To implement sparse linear regression using `sklearn`, we can use the
 `ElasticNet` class. We'll work with the Office dataset. The task is to predict
 the IMDB ratings for each episode based on which actors are in it and who the
 writers were.
@@ -333,7 +335,7 @@ ggplot(office) +
 
 #### Tree-based Models
 
-14. Tree-based models fit a different class of curves. To motivate them,
+15. Tree-based models fit a different class of curves. To motivate them,
 consider making a prediction for the bus time arrival problem using the
 following diagram,
 
@@ -348,7 +350,7 @@ for different classes. It turns out that we can train these models using squared
 error and cross-entropy losses as before, though the details are beyond the
 scope of these notes.
 
-15. It's not immediately obvious, but these rules are equivalent to drawing
+16. It's not immediately obvious, but these rules are equivalent to drawing
 curves that are piecewise constant over subsets of the input space. Let's
 convince ourselves using some pictures. First, notice that a tree with a single
 split is exactly a "curve" that takes on two values, depending on the split
@@ -369,12 +371,12 @@ include_graphics("figures/decision-tree-stump-2d.png")
 
 Q: What would be the diagram if I had switched the order of the splits (traffic before rain)?
 
-16. A very common variation on tree-based models computes a large ensemble of
+17. A very common variation on tree-based models computes a large ensemble of
 trees and then combines their curves in some way. How exactly they are combined
 is beyond the scope of these notes, but this is what random forests and gradient
 boosted decision trees are doing in the background.
 
-17. We can implement these models in `sklearn` using `RandomForestRegressor` /
+18. We can implement these models in `sklearn` using `RandomForestRegressor` /
 `RandomForestClassifier`, and `GradientBoostingRegressor` /
 `GradientBoostingClassifier`. Let's just see an example of a boosting classifier
 using the penguins dataset. The fitting / prediction code is very similar to
@@ -401,14 +403,14 @@ ggplot(py$penguins) +
 
 ### Relationships across classes
 
-17. The diagram below summarizes the relationships across elements of the model
+19. The diagram below summarizes the relationships across elements of the model
 class.
 
 ```{r}
 include_graphics("figures/methods-relationships.png")
 ```
 
-18. When should we use which of these approaches? Here are some relative
+20. When should we use which of these approaches? Here are some relative
 strengths and weaknesses.
 
 |  | Strengths | Weaknesses |
@@ -417,7 +419,7 @@ strengths and weaknesses.
 | Sparse Linear / Logistic Regression | * Often easy to interpret<br>* Stable even when many features to pick from<br>* Very fast to train | * Can only fit linear curves / boundaries |
 | Tree-based Classification / Regression | * Can fit nonlinear functions of inputs | * Can be slow to train<br>* Somewhat harder to interpret |
 
-19. Try matching models to responses in the examples below,
+21. Try matching models to responses in the examples below,
 
   * Q1: We want to predict whether a patient has a disease given just the genetic
   profile. There are 1000 genes that can serve as predictors. There are only two
